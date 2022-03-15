@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "EverTabs",
+  "description": "标签页空间管理器",
+  "background": { "service_worker": "background.bundle.js" },
+  "action": {
+    "default_icon": "icon-34.png"
+  },
+  "icons": {
+    "128": "icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://evertabs.codemeteors.com/*"],
+      "js": ["contentScript.bundle.js"],
+      "css": ["content.styles.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content.styles.css", "icon-128.png", "icon-34.png"],
+      "matches": []
+    }
+  ],
+  "permissions": [
+    "storage", "activeTab", "scripting", "tabs"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "commands": {
+    "show_mask": {
+      "suggested_key": {
+        "default": "Ctrl+Q",
+        "mac": "MacCtrl+Q"
+      },
+      "description": "show mask1"
+    }
+  }
+}
