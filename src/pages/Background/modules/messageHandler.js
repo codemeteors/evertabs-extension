@@ -1,4 +1,4 @@
-import {vars, managerBackgroundUrl, managerUrl} from "./const";
+import {vars, managerBackgroundUrl, managerUrl, managerWorkspaceUrl} from "./const";
 import {recreateTab} from "./common";
 
 // 消息处理函数
@@ -14,7 +14,7 @@ export const handlers = [
         handler: function (port, msg) {
             chrome.tabs.query({windowId: vars.currentWindowId}, tabs => {
                 console.log(new Date().toLocaleString(), 'current tabs', tabs);
-                tabs = tabs.filter(tab => {return tab.url.indexOf(managerUrl) !== 0})
+                tabs = tabs.filter(tab => {return tab.url.indexOf(managerWorkspaceUrl) !== 0})
                 port.postMessage({cmd: 'CMD_CUR_TAB_LIST', data: tabs})
             })
         }
@@ -46,7 +46,7 @@ export const handlers = [
             // 把当前窗口标签隐藏
             chrome.tabs.query({windowId: vars.currentWindowId}, curWinTabs => {
                 curWinTabs = curWinTabs.filter(tab => {
-                    return tab.url.indexOf(managerUrl) !== 0
+                    return tab.url.indexOf(managerWorkspaceUrl) !== 0
                 })
 
                 // 计算tabIds

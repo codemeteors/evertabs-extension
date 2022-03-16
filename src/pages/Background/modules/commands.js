@@ -9,6 +9,8 @@ chrome.commands.onCommand.addListener((command, tab) => {
             chrome.tabs.update(tabs[0].id, {active: true}, () => {
 
             })
+        } else {
+            console.log(new Date().toLocaleString(), 'onCommand query tabs error', tabs)
         }
     })
 });

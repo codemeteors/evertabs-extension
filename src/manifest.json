@@ -11,7 +11,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://evertabs.codemeteors.com/*"],
+      "matches": ["https://evertabs.codemeteors.com/workspace"],
       "js": ["contentScript.bundle.js"],
       "css": ["content.styles.css"]
     }

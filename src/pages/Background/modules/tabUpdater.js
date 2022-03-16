@@ -1,4 +1,4 @@
-import {vars, managerUrl} from "./const";
+import {vars, managerUrl, managerWorkspaceUrl} from "./const";
 
 // 在某些事件发生时要触发标签刷新到数据库
 let needUpdateTabs = false;
@@ -26,7 +26,7 @@ export const tryUpdateTabs = () => {
             if (vars.currentWindowId) {
                 chrome.tabs.query({windowId: vars.currentWindowId}, tabs => {
                     tabs = tabs.filter(tab => {
-                        return tab.url.indexOf(managerUrl) !== 0
+                        return tab.url.indexOf(managerWorkspaceUrl) !== 0
                     })
                     vars.curPort.postMessage({cmd: 'CMD_NEED_UPDATE_TABS', data: tabs})
                 })
