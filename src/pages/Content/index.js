@@ -1,4 +1,5 @@
 const createPort = () => {
+    console.log(new Date().toLocaleString(), 'createPort')
     let port = chrome.runtime.connect({name: 'conn'});
     // 接受background发来的消息，并转发给前端
     port.onMessage.addListener(function (msg) {

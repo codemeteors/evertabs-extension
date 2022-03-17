@@ -23,6 +23,7 @@ export const recreateTab = (port, tab, active) => {
 
 // 消息响应
 chrome.runtime.onConnect.addListener(function (port) {
+    console.log(new Date().toLocaleString(), 'port onConnect')
     console.assert(port.name === 'conn');
     if (vars.currentWindowId === undefined || vars.minimizedWindowId === undefined) {
         checkHomePageExistsOnce();
@@ -38,6 +39,7 @@ chrome.runtime.onConnect.addListener(function (port) {
     port.onDisconnect.addListener(() => {
         console.log(new Date().toLocaleString(), 'port onDisconnect')
         port = undefined;
+        vars.curPort = undefined;
     })
 
     vars.curPort = port;
