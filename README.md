@@ -21,7 +21,7 @@
 ### EverTabs是怎么工作的？
 EverTabs由chrome浏览器插件和一个管理界面构成
 #### 浏览器插件
-EverTabs浏览器插件可以在chrome扩建市场或网盘下载安装。
+EverTabs浏览器插件可以在chrome扩展市场或网盘下载安装。
 安装好后它会自动帮你打开管理界面并将其锁定到当前浏览器窗口的第一个Tab上。
 您可以通过快捷键Command+1快速打开。
 
@@ -47,6 +47,4 @@ EverTabs浏览器插件可以在chrome扩建市场或网盘下载安装。
 ![avatar](img/infoflow%202022-03-17%2009-01-14.png)
 
 ## 安装方法
-
-## 网站
-[Website](https://evertabs.codemeteors.com)
+请移步[Website](https://evertabs.codemeteors.com)
