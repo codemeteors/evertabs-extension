@@ -1,3 +1,7 @@
+import './modules/sentry'
+import {Sentry} from "./modules/sentry";
+import {BrowserTracing} from "@sentry/tracing";
+
 const createPort = () => {
     console.log(new Date().toLocaleString(), 'createPort')
     let port = chrome.runtime.connect({name: 'conn'});
@@ -53,3 +57,15 @@ window.addEventListener("message", (event) => {
 }, false);
 
 
+
+window.addEventListener("load", function () {
+    Sentry.init({
+        dsn: "https://f203e5a4a5a6436f875d2314b63a6ec9@sentry.codemeteors.com/3",
+        integrations: [new BrowserTracing()],
+
+        // Set tracesSampleRate to 1.0 to capture 100%
+        // of transactions for performance monitoring.
+        // We recommend adjusting this value in production
+        tracesSampleRate: 1.0,
+    });
+})
