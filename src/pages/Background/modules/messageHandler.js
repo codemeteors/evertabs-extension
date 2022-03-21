@@ -102,6 +102,7 @@ export const handlers = [
             port.postMessage({
                 cmd: 'CMD_SWITCH_WORKSPACE',
                 data: {
+                    workspaceId: msg.msg.data.workspaceId,
                 }
             })
         }

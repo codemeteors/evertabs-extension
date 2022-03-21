@@ -10,9 +10,11 @@ chrome.tabs.onMoved.addListener((tabId) => {
     console.log(new Date().toLocaleString(), 'tab onMoved:', tabId);
     needUpdateTabs = true;
 })
-chrome.tabs.onUpdated.addListener((tabId) => {
-    console.log(new Date().toLocaleString(), 'tab onUpdated:', tabId);
-    needUpdateTabs = true;
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+    if (changeInfo.status && changeInfo.status === 'complete') {
+        console.log(new Date().toLocaleString(), 'tab onUpdated:', tabId);
+        needUpdateTabs = true;
+    }
 })
 chrome.tabs.onRemoved.addListener(tabId => {
     console.log(new Date().toLocaleString(), 'tab onRemoved:', tabId);
