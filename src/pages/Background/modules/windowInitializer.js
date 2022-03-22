@@ -100,7 +100,7 @@ export const checkHomePageExistsOnce = () => {
 
 const checkHomePageExists = () => {
     checkHomePageExistsOnce();
-    setTimeout(checkHomePageExists, 2000)
+    setTimeout(checkHomePageExists, 4000)
 }
 
-setTimeout(checkHomePageExists, 2000)
+setTimeout(checkHomePageExists, 4000)
