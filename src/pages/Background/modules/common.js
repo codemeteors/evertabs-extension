@@ -30,7 +30,7 @@ chrome.runtime.onConnect.addListener(function (port) {
     }
     port.onMessage.addListener(function (msg) {
         handlers.map((value => {
-            if (msg.msg.command === value.name) {
+            if (msg.msg.cmd === value.name) {
                 value.handler(port, msg);
             }
         }))
