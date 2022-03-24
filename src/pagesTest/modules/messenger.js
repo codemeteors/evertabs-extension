@@ -49,11 +49,9 @@ class Messenger {
                 console.log('Messenger', '发送消息', data);
                 this.#connection.sendMessage(data);
             } else {
-                console.log('Messenger', '发送消息失败，待重试', data);
+                // console.log('Messenger', '发送消息失败，待重试', data);
                 setTimeout(() => this.trySendMessage(data, retry - 1), 200)
             }
-        } else {
-            console.log('Messenger', '发送消息彻底失败', data);
         }
     }
 

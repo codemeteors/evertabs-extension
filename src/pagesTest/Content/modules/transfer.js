@@ -8,6 +8,7 @@ let messenger = null;
  */
 class Transfer {
     constructor() {
+        console.log('Transfer', 'constructor')
         messenger = new Messenger(null, null)
     }
 
@@ -41,9 +42,11 @@ class Transfer {
                     window.addEventListener("message", that.messageListener, false);
                 }, (port) => {
                     console.log('Transfer', '断开连接', port.name)
-                    window.removeEventListener("message", that.messageListener, false)
+                    // 下面一句会导致当port长期不用自动断开后重连收不到页面的postMessage
+                    // 但注释掉会导致当插件更新后消息收两份，不过sendMessage的时候会出错，忽略掉就行了
+                    // window.removeEventListener("message", that.messageListener, false)
                     console.log('Transfer', '尝试重连')
-                    setTimeout(this.startListenMessage, 500);
+                    setTimeout(that.startListenMessage, 500);
                 });
             } catch (e) {
                 if (e.message === 'Extension context invalidated.') {
@@ -52,6 +55,8 @@ class Transfer {
                     throw e;
                 }
             }
+        } else {
+            console.log('Transfer', '无需重复建立连接', messenger)
         }
     }
 }
