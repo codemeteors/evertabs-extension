@@ -19,7 +19,9 @@ class Transfer {
 
         if (event.data.type && (event.data.type === "PAGE_TO_EVER_TABS")) {
             // 把消息转发给background
-            messenger.sendMessage(event.data.msg)
+            if (messenger.isConnected()) {
+                messenger.sendMessage(event.data.msg)
+            }
         }
     }
 
@@ -46,7 +48,7 @@ class Transfer {
                     // 但注释掉会导致当插件更新后消息收两份，不过sendMessage的时候会出错，忽略掉就行了
                     // window.removeEventListener("message", that.messageListener, false)
                     console.log('Transfer', '尝试重连')
-                    setTimeout(that.startListenMessage, 500);
+                    that.startListenMessage();
                 });
             } catch (e) {
                 if (e.message === 'Extension context invalidated.') {

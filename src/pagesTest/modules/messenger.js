@@ -46,7 +46,7 @@ class Messenger {
     trySendMessage(data, retry) {
         if (retry > 0) {
             if (this.#connection.isConnected()) {
-                console.log('Messenger', '发送消息', data);
+                console.log('Messenger', '发送消息', data, this.#connection.getName());
                 this.#connection.sendMessage(data);
             } else {
                 // console.log('Messenger', '发送消息失败，待重试', data);

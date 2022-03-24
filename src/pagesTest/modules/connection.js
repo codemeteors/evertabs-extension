@@ -35,7 +35,16 @@ class Connection {
 
     sendMessage(data) {
         if (this.#connected) {
-            this.#port.postMessage(data)
+            try {
+                this.#port.postMessage(data)
+            } catch (e) {
+                if (e.message === 'Extension context invalidated.') {
+                    console.log('Connection', '发送消息失败，扩展上下文变了')
+                    this.onDisconnect(this.#port)
+                } else {
+                    throw e;
+                }
+            }
         } else {
             console.log('Connection', '发送失败，连接已断开', data)
         }
@@ -47,6 +56,14 @@ class Connection {
 
     setOnDisconnectHandler(handler) {
         this.#onDisconnectHandler = handler
+    }
+
+    getName() {
+        if (this.#port) {
+            return this.#port.name
+        } else {
+            return null;
+        }
     }
 }
 
