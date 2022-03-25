@@ -54,8 +54,12 @@ export function switchWorkspaceHandler(messenger, data) {
     // 把新workspace的tab移到当前窗口，everTabs相关的链接除外
     data.tabs.map((tab, index) => {
         if (tab.url.indexOf(managerWorkspaceUrl) !== 0 && tab.url.indexOf(managerBackgroundUrl) !== 0) {
-            try {
-                chrome.tabs.get(tab.id, (res) => {
+            chrome.tabs.get(tab.id, (res) => {
+                if (chrome.runtime.lastError) {
+                    console.log(chrome.runtime.lastError.message);
+                    // tab不存在，重新加载
+                    recreateTab(messenger, tab, data.activeTabId === tab.id);
+                } else {
                     if (res && res.url === tab.url) {
                         chrome.tabs.move(tab.id, {
                             windowId: vars.currentWindowId,
@@ -70,11 +74,8 @@ export function switchWorkspaceHandler(messenger, data) {
                         // 如果url变了，就重新加载tab
                         recreateTab(messenger, tab, data.activeTabId === tab.id);
                     }
-                })
-            } catch (e) {
-                // 如果找不到了隐藏的tab，就重新加载tab
-                recreateTab(messenger, tab, data.activeTabId === tab.id);
-            }
+                }
+            })
         }
     })
 
