@@ -34,7 +34,7 @@ class Messenger {
         console.log('Messenger', '收到消息', message);
         if (that.handlers) {
             if (message.cmd in that.handlers) {
-                that.handlers[message.cmd](message.data);
+                that.handlers[message.cmd](this, message.data);
             }
         }
 

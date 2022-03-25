@@ -1,3 +1,5 @@
+import {checkHomePageExists} from "./windowInitializer";
+
 class Initializer {
 
     installContentScript() {
@@ -28,6 +30,10 @@ class Initializer {
 
     initContentScript() {
         chrome.runtime.onInstalled.addListener(this.installContentScript);
+    }
+
+    initWindow() {
+        setTimeout(checkHomePageExists, 1000)
     }
 }
 
