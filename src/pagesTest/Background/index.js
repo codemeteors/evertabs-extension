@@ -6,6 +6,7 @@ import {curTabListHandler} from "./modules/handlers/curTabListHandler";
 import {hideTabHandler} from "./modules/handlers/hideTabHandler";
 import {focusTabHandler} from "./modules/handlers/focusTabHandler";
 import {switchWorkspaceHandler} from "./modules/handlers/switchWorkspaceHandler";
+import {dumpInfoHandler} from "./modules/handlers/dumpInfoHandler";
 
 const initializer = new Initializer();
 initializer.initContentScript();
@@ -21,6 +22,9 @@ const listener = new Listener((connection) => {
     messenger.registerHandlers("CMD_HIDE_TAB", hideTabHandler)
     messenger.registerHandlers("CMD_FOCUS_TAB", focusTabHandler)
     messenger.registerHandlers("CMD_SWITCH_WORKSPACE", switchWorkspaceHandler)
+    messenger.registerHandlers("CMD_DUMP_INFO", dumpInfoHandler)
+
+    initializer.initCommandListener(messenger);
 })
 
 listener.listen()
