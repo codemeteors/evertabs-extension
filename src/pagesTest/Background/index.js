@@ -7,10 +7,13 @@ import {hideTabHandler} from "./modules/handlers/hideTabHandler";
 import {focusTabHandler} from "./modules/handlers/focusTabHandler";
 import {switchWorkspaceHandler} from "./modules/handlers/switchWorkspaceHandler";
 import {dumpInfoHandler} from "./modules/handlers/dumpInfoHandler";
+import UpdateTabsInitializer from "./modules/updateTabsInitializer";
 
 const initializer = new Initializer();
 initializer.initContentScript();
 initializer.initWindow();
+
+const updateTabInitializer = new UpdateTabsInitializer()
 
 const listener = new Listener((connection) => {
     const messenger = new Messenger(connection, (port) => {
@@ -25,6 +28,8 @@ const listener = new Listener((connection) => {
     messenger.registerHandlers("CMD_DUMP_INFO", dumpInfoHandler)
 
     initializer.initCommandListener(messenger);
+
+    updateTabInitializer.setMessenger(messenger)
 })
 
 listener.listen()

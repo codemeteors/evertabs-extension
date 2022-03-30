@@ -1,5 +1,5 @@
 import {checkHomePageExists} from "./windowInitializer";
-import {managerWorkspaceUrlRegex, vars} from "../../../pages/Background/modules/const";
+import {managerWorkspaceUrl, managerWorkspaceUrlRegex, vars} from "./const";
 
 class Initializer {
 
