@@ -6,11 +6,14 @@ import {
 } from "./const";
 
 // 清理掉当前窗口的managerBackgroundUrl
-const removeCurrentWindowManagerBackgroundUrl = () => {
-    chrome.tabs.query({currentWindow: true, url: managerBackgroundUrl}, (tabs) => {
-        tabs.map((tab) => {
-            chrome.tabs.remove(tab.id).then();
-        })
+const removeCurrentWindowManagerBackgroundUrl = (windowId, why) => {
+    chrome.tabs.query({windowId: windowId, url: managerBackgroundUrl}, (tabs) => {
+        if (tabs.length > 0) {
+            console.log(new Date().toLocaleString(), 'removeCurrentWindowManagerBackgroundUrl reason: ', why, 'windowId:', tabs[0].windowId);
+            tabs.map((tab) => {
+                chrome.tabs.remove(tab.id).then();
+            })
+        }
     })
 }
 
@@ -48,8 +51,9 @@ export const checkHomePageExistsOnce = () => {
             })
 
             // 清理掉当前窗口的managerBackgroundUrl
-            removeCurrentWindowManagerBackgroundUrl()
+            removeCurrentWindowManagerBackgroundUrl(tabs[0].windowId, 'reason1')
 
+            console.log(new Date().toLocaleString(), 'update1 vars.currentWindowId:', tabs[0].windowId);
             vars.currentWindowId = tabs[0].windowId
         }
     })
@@ -59,10 +63,13 @@ export const checkHomePageExistsOnce = () => {
             // 所有窗口都没有managerWorkspaceUrl，则在当前窗口起一个managerWorkspaceUrl
             chrome.windows.getCurrent((window) => {
                 chrome.tabs.create({windowId: window.id, url: managerWorkspaceUrl}, (tab) => {
+                    console.log(new Date().toLocaleString(), 'update2 vars.currentWindowId:', window.id);
                     vars.currentWindowId = window.id;
 
                     // 清理掉当前窗口的managerBackgroundUrl
-                    removeCurrentWindowManagerBackgroundUrl()
+                    removeCurrentWindowManagerBackgroundUrl(window.id, 'reason2')
+
+                    tryPinTab(tab);
                 });
             })
         } else {
@@ -73,7 +80,10 @@ export const checkHomePageExistsOnce = () => {
                 })
             } else if (tabs.length === 1) {
                 // 如果有一个，那就是它
-                vars.currentWindowId = tabs[0].windowId
+                if (vars.currentWindowId !== tabs[0].windowId) {
+                    console.log(new Date().toLocaleString(), 'update3 vars.currentWindowId:', tabs[0].windowId);
+                    vars.currentWindowId = tabs[0].windowId
+                }
             }
         }
     })
@@ -85,12 +95,16 @@ export const checkHomePageExistsOnce = () => {
             removeAllTabsExceptFirst(tabs);
             // 没固定的先固定
             tryPinTab(tabs[0]);
-            vars.minimizedWindowId = tabs[0].windowId
+            if (vars.minimizedWindowId !== tabs[0].windowId) {
+                console.log(new Date().toLocaleString(), 'update4 vars.minimizedWindowId:', tabs[0].windowId);
+                vars.minimizedWindowId = tabs[0].windowId
+            }
         } else {
             // 没有隐藏窗口则新建一个
             chrome.windows.create({state: "minimized"}, window => {
                 // 创建managerBackgroundUrl
                 chrome.tabs.create({windowId: window.id, url: managerBackgroundUrl}, (tab) => {
+                    console.log(new Date().toLocaleString(), 'update5 vars.minimizedWindowId:', window.id);
                     vars.minimizedWindowId = window.id;
                 });
             });
@@ -98,9 +112,8 @@ export const checkHomePageExistsOnce = () => {
     })
 }
 
-const checkHomePageExists = () => {
+export const checkHomePageExists = () => {
     checkHomePageExistsOnce();
     setTimeout(checkHomePageExists, 4000)
 }
 
-setTimeout(checkHomePageExists, 4000)

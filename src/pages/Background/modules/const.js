@@ -6,5 +6,5 @@ export const managerBackgroundUrl = managerUrl + '/background';
 export const vars = {
     minimizedWindowId: undefined,
     currentWindowId: undefined,
-    curPort: undefined,
+    needUpdateTabs: false,
 }
