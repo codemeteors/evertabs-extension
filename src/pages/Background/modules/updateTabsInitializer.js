@@ -11,6 +11,9 @@ class UpdateTabsInitializer {
     init() {
         chrome.tabs.onCreated.addListener((tab) => {
             console.log(new Date().toLocaleString(), 'tab onCreated:', tab);
+            if (!tab.openerTabId) {
+                vars.foreignCreatedTab = tab;
+            }
             vars.needUpdateTabs = true;
         })
         chrome.tabs.onMoved.addListener((tabId) => {
@@ -45,7 +48,8 @@ class UpdateTabsInitializer {
                             return tab.url.indexOf(managerWorkspaceUrl) !== 0
                         })
                         if (this.#messenger) {
-                            this.#messenger.sendMessage({cmd: 'CMD_NEED_UPDATE_TABS', data: tabs})
+                            this.#messenger.sendMessage({cmd: 'CMD_NEED_UPDATE_TABS', data: {tabs: tabs, foreignCreatedTab: vars.foreignCreatedTab}})
+                            vars.foreignCreatedTab = undefined;
                         }
                     })
                 }

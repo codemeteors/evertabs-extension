@@ -7,4 +7,5 @@ export const vars = {
     minimizedWindowId: undefined,
     currentWindowId: undefined,
     needUpdateTabs: false,
+    foreignCreatedTab: undefined, // 从浏览器外部点击链接
 }
