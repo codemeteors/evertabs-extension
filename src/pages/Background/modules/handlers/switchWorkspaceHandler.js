@@ -52,32 +52,34 @@ export function switchWorkspaceHandler(messenger, data) {
     })
 
     // 把新workspace的tab移到当前窗口，everTabs相关的链接除外
-    data.tabs.map((tab, index) => {
-        if (tab.url.indexOf(managerWorkspaceUrl) !== 0 && tab.url.indexOf(managerBackgroundUrl) !== 0) {
-            chrome.tabs.get(tab.id, (res) => {
-                if (chrome.runtime.lastError) {
-                    console.log(chrome.runtime.lastError.message);
-                    // tab不存在，重新加载
-                    recreateTab(messenger, tab, data.activeTabId === tab.id);
-                } else {
-                    if (res && res.url === tab.url) {
-                        chrome.tabs.move(tab.id, {
-                            windowId: vars.currentWindowId,
-                            index: -1,
-                        }, (tab) => {
-                            console.log(new Date().toLocaleString(), 'move tab ', tab, ' to currentWindowId:', vars.currentWindowId);
-                            if (data.activeTabId === tab.id) {
-                                chrome.tabs.update(tab.id, {active: true}).then()
-                            }
-                        });
-                    } else {
-                        // 如果url变了，就重新加载tab
+    if (data.tabs) {
+        data.tabs.map((tab, index) => {
+            if (tab.url.indexOf(managerWorkspaceUrl) !== 0 && tab.url.indexOf(managerBackgroundUrl) !== 0) {
+                chrome.tabs.get(tab.id, (res) => {
+                    if (chrome.runtime.lastError) {
+                        console.log(chrome.runtime.lastError.message);
+                        // tab不存在，重新加载
                         recreateTab(messenger, tab, data.activeTabId === tab.id);
+                    } else {
+                        if (res && res.url === tab.url) {
+                            chrome.tabs.move(tab.id, {
+                                windowId: vars.currentWindowId,
+                                index: -1,
+                            }, (tab) => {
+                                console.log(new Date().toLocaleString(), 'move tab ', tab, ' to currentWindowId:', vars.currentWindowId);
+                                if (data.activeTabId === tab.id) {
+                                    chrome.tabs.update(tab.id, {active: true}).then()
+                                }
+                            });
+                        } else {
+                            // 如果url变了，就重新加载tab
+                            recreateTab(messenger, tab, data.activeTabId === tab.id);
+                        }
                     }
-                }
-            })
-        }
-    })
+                })
+            }
+        })
+    }
 
     messenger.sendMessage({
         cmd: 'CMD_SWITCH_WORKSPACE',

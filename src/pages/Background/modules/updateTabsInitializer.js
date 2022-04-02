@@ -31,6 +31,12 @@ class UpdateTabsInitializer {
             vars.needUpdateTabs = true;
         })
 
+        // chrome.tabs.onActivated.addListener((tabInfo) => {
+        //     if (this.#messenger) {
+        //         this.#messenger.sendMessage({cmd: 'CMD_TAB_ACTIVATED', data: tabInfo})
+        //     }
+        // })
+
         setTimeout(() => this.tryUpdateTabs(), 200)
     }
 
