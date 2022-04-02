@@ -41,18 +41,17 @@ class Initializer {
         chrome.commands.onCommand.addListener((cmd, tab) => {
             console.log(`Command "${cmd}" triggered`);
 
+            messenger.sendMessage({
+                cmd: 'CMD_EXECUTE_CMD',
+                data: {
+                    cmd: cmd,
+                    tab: tab
+                }
+            })
             chrome.tabs.query({currentWindow: true, url: managerWorkspaceUrlRegex}, (tabs) => {
                 if (tabs.length === 1) {
-                    messenger.sendMessage({
-                        cmd: 'CMD_EXECUTE_CMD',
-                        data: {
-                            cmd: cmd,
-                            tab: tab
-                        }
-                    })
-                    chrome.tabs.update(tabs[0].id, {active: true}, () => {
 
-                    })
+                    chrome.tabs.update(tabs[0].id, {active: true}, () => {})
                 } else {
                     console.log(new Date().toLocaleString(), 'onCommand query tabs error', tabs)
                 }
