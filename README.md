@@ -47,4 +47,8 @@ EverTabs浏览器插件可以在chrome扩展市场或网盘下载安装。
 ![avatar](img/infoflow%202022-03-17%2009-01-14.png)
 
 ## 安装方法
+#### chrome应用商店安装
+[chrome应用商店网址](https://chrome.google.com/webstore/detail/evertabs/gbgjaejmpjibjoalhpipkipjigmekglj)
+
+#### 手动安装
 请移步[Website](https://evertabs.codemeteors.com)
