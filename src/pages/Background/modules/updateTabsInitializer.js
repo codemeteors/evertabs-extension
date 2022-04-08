@@ -1,5 +1,8 @@
 import {managerWorkspaceUrl, vars} from "./const";
 
+/**
+ * 不要这种更新，因为可能和selectedWorkspaceId不一致，导致错乱
+ */
 class UpdateTabsInitializer {
 
     #messenger;
@@ -11,24 +14,33 @@ class UpdateTabsInitializer {
     init() {
         chrome.tabs.onCreated.addListener((tab) => {
             console.log(new Date().toLocaleString(), 'tab onCreated:', tab);
-            if (!tab.openerTabId) {
-                vars.foreignCreatedTab = tab;
-            }
-            vars.needUpdateTabs = true;
+            // 有create一定会触发一个update
+            // if (this.#messenger) {
+            //     this.#messenger.sendMessage({cmd: 'CMD_TAB_CHANGED',
+            //         data: {'action': 'create', tab: tab}})
+            // }
         })
         chrome.tabs.onMoved.addListener((tabId) => {
             console.log(new Date().toLocaleString(), 'tab onMoved:', tabId);
             vars.needUpdateTabs = true;
         })
-        chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
-            if (changeInfo.status && changeInfo.status === 'complete') {
+        chrome.tabs.onUpdated.addListener((tabId, info) => {
+            if (info.status && info.status === 'complete') {
                 console.log(new Date().toLocaleString(), 'tab onUpdated:', tabId);
-                vars.needUpdateTabs = true;
+                chrome.tabs.get(tabId, (tab) => {
+                    if (this.#messenger) {
+                        this.#messenger.sendMessage({cmd: 'CMD_TAB_CHANGED',
+                            data: {'action': 'update', tab: tab}})
+                    }
+                })
             }
         })
-        chrome.tabs.onRemoved.addListener(tabId => {
+        chrome.tabs.onRemoved.addListener((tabId, info) => {
             console.log(new Date().toLocaleString(), 'tab onRemoved:', tabId);
-            vars.needUpdateTabs = true;
+            if (this.#messenger) {
+                this.#messenger.sendMessage({cmd: 'CMD_TAB_CHANGED',
+                    data: {'action': 'remove', tabId: tabId, info: info}})
+            }
         })
 
         // chrome.tabs.onActivated.addListener((tabInfo) => {
@@ -37,7 +49,7 @@ class UpdateTabsInitializer {
         //     }
         // })
 
-        setTimeout(() => this.tryUpdateTabs(), 200)
+        // setTimeout(() => this.tryUpdateTabs(), 200)
     }
 
     setMessenger(messenger) {
