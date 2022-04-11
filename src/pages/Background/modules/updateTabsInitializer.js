@@ -28,7 +28,8 @@ class UpdateTabsInitializer {
             if (info.status && info.status === 'complete') {
                 console.log(new Date().toLocaleString(), 'tab onUpdated:', tabId);
                 chrome.tabs.get(tabId, (tab) => {
-                    if (this.#messenger) {
+                    if (this.#messenger
+                        && (tab.windowId === vars.currentWindowId || tab.windowId === vars.minimizedWindowId)) {
                         this.#messenger.sendMessage({cmd: 'CMD_TAB_CHANGED',
                             data: {'action': 'update', tab: tab}})
                     }
