@@ -22,7 +22,13 @@ class UpdateTabsInitializer {
         })
         chrome.tabs.onMoved.addListener((tabId) => {
             console.log(new Date().toLocaleString(), 'tab onMoved:', tabId);
-            vars.needUpdateTabs = true;
+            chrome.tabs.get(tabId, (tab) => {
+                if (this.#messenger
+                    && (tab.windowId === vars.currentWindowId)) {
+                    this.#messenger.sendMessage({cmd: 'CMD_TAB_CHANGED',
+                        data: {'action': 'move', tab: tab}})
+                }
+            })
         })
         chrome.tabs.onUpdated.addListener((tabId, info) => {
             if (info.status && info.status === 'complete') {
