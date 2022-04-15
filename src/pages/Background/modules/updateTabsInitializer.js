@@ -1,4 +1,4 @@
-import {managerWorkspaceUrl, vars} from "./const";
+import {managerBackgroundUrl, managerWorkspaceUrl, vars} from "./const";
 
 /**
  * 不要这种更新，因为可能和selectedWorkspaceId不一致，导致错乱
@@ -35,7 +35,9 @@ class UpdateTabsInitializer {
                 console.log(new Date().toLocaleString(), 'tab onUpdated:', tabId);
                 chrome.tabs.get(tabId, (tab) => {
                     if (this.#messenger
-                        && (tab.windowId === vars.currentWindowId || tab.windowId === vars.minimizedWindowId)) {
+                        && (tab.windowId === vars.currentWindowId || tab.windowId === vars.minimizedWindowId)
+                        && (tab.url !== managerWorkspaceUrl && tab.url !== managerBackgroundUrl)
+                    ) {
                         this.#messenger.sendMessage({cmd: 'CMD_TAB_CHANGED',
                             data: {'action': 'update', tab: tab}})
                     }
