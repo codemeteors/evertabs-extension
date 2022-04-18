@@ -1,4 +1,5 @@
 import Messenger from "../../modules/messenger";
+import {log} from "../../modules/logger";
 
 // 必须用全局变量，否则messageListener里取不到
 let messenger = null;
@@ -8,7 +9,7 @@ let messenger = null;
  */
 class Transfer {
     constructor() {
-        console.log('Transfer', 'constructor')
+        log('Transfer', 'constructor')
         messenger = new Messenger(null, null)
     }
 
@@ -40,25 +41,25 @@ class Transfer {
         if (!messenger.isConnected()) {
             try {
                 messenger.connect((port) => {
-                    console.log('Transfer', '连接建立', port.name)
+                    log('Transfer 连接建立', port.name)
                     window.addEventListener("message", that.messageListener, false);
                 }, (port) => {
-                    console.log('Transfer', '断开连接', port.name)
+                    log('Transfer 断开连接', port.name)
                     // 下面一句会导致当port长期不用自动断开后重连收不到页面的postMessage
                     // 但注释掉会导致当插件更新后消息收两份，不过sendMessage的时候会出错，忽略掉就行了
                     // window.removeEventListener("message", that.messageListener, false)
-                    console.log('Transfer', '尝试重连')
+                    log('Transfer', '尝试重连')
                     that.startListenMessage();
                 });
             } catch (e) {
                 if (e.message === 'Extension context invalidated.') {
-                    console.log('Transfer', '尝试连接失败，扩展上下文变了')
+                    log('Transfer', '尝试连接失败，扩展上下文变了')
                 } else {
                     throw e;
                 }
             }
         } else {
-            console.log('Transfer', '无需重复建立连接', messenger)
+            log('Transfer 无需重复建立连接', messenger)
         }
     }
 }
