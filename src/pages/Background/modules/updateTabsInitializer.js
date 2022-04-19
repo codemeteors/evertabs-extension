@@ -32,12 +32,15 @@ class UpdateTabsInitializer {
         })
         chrome.tabs.onUpdated.addListener((tabId, info) => {
             if (info.status && info.status === 'complete') {
-                console.log(new Date().toLocaleString(), 'tab onUpdated:', tabId);
+                console.log(new Date().toLocaleString(), 'tab onUpdated:', tabId, vars.idMap);
                 chrome.tabs.get(tabId, (tab) => {
                     if (this.#messenger
                         && (tab.windowId === vars.currentWindowId || tab.windowId === vars.minimizedWindowId)
                         && (tab.url !== managerWorkspaceUrl && tab.url !== managerBackgroundUrl)
                     ) {
+                        if (vars.idMap.hasOwnProperty(tab.id)) {
+                            tab.pkId = vars.idMap[tab.id]
+                        }
                         this.#messenger.sendMessage({cmd: 'CMD_TAB_CHANGED',
                             data: {'action': 'update', tab: tab}})
                     }

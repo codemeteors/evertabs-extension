@@ -8,4 +8,5 @@ export const vars = {
     currentWindowId: undefined,
     needUpdateTabs: false,
     foreignCreatedTab: undefined, // 从浏览器外部点击链接
+    idMap: {}
 }
