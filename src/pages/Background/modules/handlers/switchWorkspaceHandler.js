@@ -7,6 +7,8 @@ const recreateTab = (messenger, tab, active) => {
         url: tab.url,
         windowId: vars.currentWindowId
     }, (newTab) => {
+        // 尽快把id对应关系存起来，有用
+        vars.idMap[newTab.id] = tab.pkId
         console.log(new Date().toLocaleString(), 'recreate tab ', tab, ' newid=', newTab.id, ' in currentWindowId:', vars.currentWindowId);
         messenger.sendMessage({
             cmd: 'CMD_UPDATE_TAB',

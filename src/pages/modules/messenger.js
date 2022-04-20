@@ -1,4 +1,5 @@
 import Connection from "./connection";
+import {log} from "./logger";
 
 class Messenger {
     
@@ -31,7 +32,7 @@ class Messenger {
      * @param port
      */
     onMessage(that, message) {
-        console.log('Messenger', '收到消息', message);
+        log('Messenger 收到消息', message);
         if (that.handlers) {
             if (message.cmd in that.handlers) {
                 that.handlers[message.cmd](this, message.data);
@@ -46,7 +47,7 @@ class Messenger {
     trySendMessage(data, retry) {
         if (retry > 0) {
             if (this.#connection.isConnected()) {
-                console.log('Messenger', '发送消息', data, this.#connection.getName());
+                log('Messenger 发送消息 ' + this.#connection.getName(), data);
                 this.#connection.sendMessage(data);
             } else {
                 // console.log('Messenger', '发送消息失败，待重试', data);
