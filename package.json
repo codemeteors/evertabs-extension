@@ -1,6 +1,6 @@
 {
   "name": "evertabs-extension",
-  "version": "0.0.0.2",
+  "version": "0.0.0.3",
   "description": "chrome浏览器标签管理器插件",
   "license": "MIT",
   "scripts": {
